@@ -8,6 +8,7 @@ func New(deviceType, name string) IDevice {
 	switch deviceType {
 	case "NAS":
 		return &NAS{name: name}
+
 		//case "SAN":
 		//	return &SAN{name: name}
 		//case "FAS":
@@ -39,6 +40,7 @@ type IDevice interface {
 	NewMap(len int) error
 
 	/**
+
 	 * 回傳當前的map
 	 */
 	GetCurrentMap() map[string]int

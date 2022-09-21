@@ -11,3 +11,11 @@ type FAS struct {
 type SAN struct {
 	Dtype, name string
 }
+
+//type Device struct {
+//	Dtype, name string
+//}
+//
+//var NAS Device
+
+//創建列表
