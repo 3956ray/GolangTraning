@@ -15,7 +15,7 @@ func (nas *NAS) Type() string {
 }
 
 func (nas *NAS) Name() string {
-	return nas.Name()
+	return nas.name
 }
 
 /*
@@ -25,7 +25,7 @@ func (nas *NAS) Name() string {
 func (nas *NAS) NewMap(len int) error {
 	rand.Seed(time.Now().UnixNano())
 	//生成指定長度map
-	m := make(map[string]int, len)
+	m = make(map[string]int, len)
 	for i := 0; i < len; i++ {
 		//1-1000 == (0-999)+1
 		m["NAS_Ray_"+string(i)] = rand.Intn(999) + 1
@@ -40,7 +40,7 @@ func (nas *NAS) NewMap(len int) error {
 }
 
 func (nas *NAS) GetCurrentMap() map[string]int {
-	return nil
+	return m
 }
 
 func (nas *NAS) StartCounter() error {
@@ -70,3 +70,7 @@ func (nas *NAS) Panic() {
 
 func (nas *NAS) Destruct() {
 }
+
+//func NewNas(name string) *NAS {
+//	return &NAS{name: name}
+//}

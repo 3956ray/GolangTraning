@@ -15,10 +15,8 @@ func (san *SAN) Type() string {
 }
 
 func (san *SAN) Name() string {
-	return san.Name()
+	return san.name
 }
-
-var m map[string]int
 
 /*
 *
@@ -47,8 +45,8 @@ func (san *SAN) GetCurrentMap() map[string]int {
 
 func (san *SAN) StartCounter() error {
 	count = 0
-	//每十秒計數一次
-	timer = time.NewTimer(time.Second * 10)
+	//每0.5秒計數一次
+	timer = time.NewTimer((time.Second * 1) / 2)
 	select {
 	case <-timer.C:
 		count++
