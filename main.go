@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"time"
 )
 
-var TimeCount *time.Timer
+var timer *time.Timer
+var count int
 
 //type treeNode struct {
 //	value       int
@@ -32,19 +32,14 @@ var TimeCount *time.Timer
 
 func main() {
 
-	//for {
-	//	//	顯示菜單
-	//	if !menu() {
-	//		break
-	//	}
-	//	//	選取菜單
-	//	//menuSelect()
-	//	//	顯示選項菜單
-	//
-	//}
-	TimeCount = time.NewTimer(time.Second)
+	for {
+		//	顯示菜單
+		if !menu() {
+			break
+		}
+		//	選取菜單
+		//menuSelect()
+		//	顯示選項菜單
 
-	fmt.Println(TimeCount)
-	TimeCount.Stop()
-	fmt.Println(TimeCount.C)
+	}
 }

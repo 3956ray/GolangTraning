@@ -1,16 +1,18 @@
 package main
 
 type NAS struct {
-	Dtype, name string
+	deviceType, name string
 }
 
 type FAS struct {
-	Dtype, name string
+	deviceType, name string
 }
 
 type SAN struct {
-	Dtype, name string
+	deviceType, name string
 }
+
+//切片數組,存放單位為動態的struct類型
 
 //type Device struct {
 //	Dtype, name string

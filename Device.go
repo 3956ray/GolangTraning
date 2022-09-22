@@ -8,9 +8,8 @@ func New(deviceType, name string) IDevice {
 	switch deviceType {
 	case "NAS":
 		return &NAS{name: name}
-
-		//case "SAN":
-		//	return &SAN{name: name}
+	case "SAN":
+		return &SAN{name: name}
 		//case "FAS":
 		//	return &FAS{name: name}
 	}
