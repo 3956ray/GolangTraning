@@ -55,7 +55,11 @@ func (fas *FAS) StartCounter() error {
 }
 
 func (fas *FAS) StopCounter() error {
-	timer.Stop()
+	if timer.Stop() {
+		fmt.Println(">> 計數器關閉成功")
+	} else {
+		fmt.Println(">> 計數器未啟動")
+	}
 	return nil
 }
 

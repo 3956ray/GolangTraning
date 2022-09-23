@@ -56,7 +56,12 @@ func (nas *NAS) StartCounter() error {
 }
 
 func (nas *NAS) StopCounter() error {
-	timer.Stop()
+	if timer.Stop() {
+		fmt.Println(">> 計數器關閉成功")
+		timer.Reset(time.Second)
+	} else {
+		fmt.Println(">> 計數器未啟動")
+	}
 	return nil
 }
 
