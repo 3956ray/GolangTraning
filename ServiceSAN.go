@@ -31,11 +31,7 @@ func (san *SAN) NewMap(len int) error {
 		m[fmt.Sprintf("SAN_Ray_%d ", i)] = rand.Intn(999) + 1
 	}
 
-	fmt.Printf("map[")
-	for k, v := range m {
-		fmt.Printf("%v: %d ", k, v)
-	}
-	fmt.Printf("]\n")
+	fmt.Println(m)
 
 	return nil
 }
