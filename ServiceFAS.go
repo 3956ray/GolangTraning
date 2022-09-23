@@ -26,16 +26,21 @@ func (fas *FAS) NewMap(len int) error {
 	rand.Seed(time.Now().UnixNano())
 	//生成指定長度map
 	m := make(map[string]int, len)
+
 	for i := 0; i < len; i++ {
 		//1-1000 == (0-999)+1
-		m["FAS_Ray_"+string(i)] = rand.Intn(999) + 1
+
+		m[fmt.Sprintf("FAS_Ray_%d", i)] = rand.Intn(999) + 1
+
+		//不能使用string(int)强制轉換，因爲golang會把int當作UTF-8的二進制碼
+		//m["FAS_Ray_"+string(i)] = rand.Intn(999) + 1
 	}
 
+	fmt.Printf("map[")
 	for k, v := range m {
-		fmt.Printf("%v: %d", k, v)
+		fmt.Printf("%v: %d ", k, v)
 	}
-
-	//斷言？
+	fmt.Printf("]\n")
 	return nil
 }
 

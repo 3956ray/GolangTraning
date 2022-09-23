@@ -28,14 +28,14 @@ func (nas *NAS) NewMap(len int) error {
 	m = make(map[string]int, len)
 	for i := 0; i < len; i++ {
 		//1-1000 == (0-999)+1
-		m["NAS_Ray_"+string(i)] = rand.Intn(999) + 1
+		m[fmt.Sprintf("NAS_Ray_%d", i)] = rand.Intn(999) + 1
 	}
 
+	fmt.Printf("map[")
 	for k, v := range m {
-		fmt.Printf("%v: %d", k, v)
+		fmt.Printf("%v: %d ", k, v)
 	}
-	println()
-	//斷言？
+	fmt.Printf("]\n")
 	return nil
 }
 

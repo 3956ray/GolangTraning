@@ -87,10 +87,6 @@ func menuOption2() {
 	}
 }
 
-/*
-*
-菜單3實現
-*/
 func menuOption3() bool {
 	//如果產品為空，輸出為新增產品
 	var deviceNumber int

@@ -28,14 +28,15 @@ func (san *SAN) NewMap(len int) error {
 	m = make(map[string]int, len)
 	for i := 0; i < len; i++ {
 		//1-1000 == (0-999)+1
-		m["SAN_Ray_"+string(i)] = rand.Intn(999) + 1
+		m[fmt.Sprintf("SAN_Ray_%d ", i)] = rand.Intn(999) + 1
 	}
 
+	fmt.Printf("map[")
 	for k, v := range m {
-		fmt.Printf("%v: %d", k, v)
+		fmt.Printf("%v: %d ", k, v)
 	}
+	fmt.Printf("]\n")
 
-	//斷言？
 	return nil
 }
 

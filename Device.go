@@ -39,7 +39,6 @@ type IDevice interface {
 	NewMap(len int) error
 
 	/**
-
 	 * 回傳當前的map
 	 */
 	GetCurrentMap() map[string]int
