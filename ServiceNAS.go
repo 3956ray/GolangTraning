@@ -34,7 +34,7 @@ func (nas *NAS) NewMap(len int) error {
 	for k, v := range m {
 		fmt.Printf("%v: %d", k, v)
 	}
-
+	println()
 	//斷言？
 	return nil
 }
@@ -51,6 +51,7 @@ func (nas *NAS) StartCounter() error {
 	case <-timer.C:
 		count++
 	}
+	fmt.Println(">> 計數器啟動成功")
 	return nil
 }
 
@@ -70,7 +71,3 @@ func (nas *NAS) Panic() {
 
 func (nas *NAS) Destruct() {
 }
-
-//func NewNas(name string) *NAS {
-//	return &NAS{name: name}
-//}
