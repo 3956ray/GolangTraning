@@ -25,7 +25,7 @@ func (fas *FAS) Name() string {
 func (fas *FAS) NewMap(len int) error {
 	rand.Seed(time.Now().UnixNano())
 	//生成指定長度map
-	m := make(map[string]int, len)
+	m = make(map[string]int, len)
 
 	for i := 0; i < len; i++ {
 		//1-1000 == (0-999)+1
@@ -36,11 +36,7 @@ func (fas *FAS) NewMap(len int) error {
 		//m["FAS_Ray_"+string(i)] = rand.Intn(999) + 1
 	}
 
-	fmt.Printf("map[")
-	for k, v := range m {
-		fmt.Printf("%v: %d ", k, v)
-	}
-	fmt.Printf("]\n")
+	fmt.Println(m)
 	return nil
 }
 

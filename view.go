@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 )
 
 /*
@@ -90,7 +92,6 @@ func menuOption2() {
 func menuOption3() bool {
 	//如果產品為空，輸出為新增產品
 	var deviceNumber int
-	var option int
 
 	//檢測是否存在並選取
 	if len(deviceList) > 1 {
@@ -100,7 +101,7 @@ func menuOption3() bool {
 		fmt.Printf("<< 請輸入指定產品列表內的編號：")
 		fmt.Scanf("%d\n", &deviceNumber)
 
-		if deviceNumber < len(deviceList) || deviceNumber > 0 {
+		if deviceNumber < len(deviceList) && deviceNumber > 0 {
 			for {
 				fmt.Println("--------------------------------------")
 				fmt.Println(">> 產品操作代號：")
@@ -114,15 +115,15 @@ func menuOption3() bool {
 				fmt.Println("        8. 拋出panic")
 				fmt.Println("        9. 結束")
 				fmt.Printf("<< 請輸入執行的動作：")
-
+				var option int
 				fmt.Scanf("%d\n", &option)
 				switch option {
 				case 1:
 					//	回傳產品類型
-					fmt.Println(deviceList[deviceNumber].Type())
+					fmt.Println(">> 當前產品類型: " + deviceList[deviceNumber].Type())
 				case 2:
 					//	回傳產品名稱
-					fmt.Println(deviceList[deviceNumber].Name())
+					fmt.Println(">> 當前產品名稱:" + deviceList[deviceNumber].Name())
 				case 3:
 					//	生成指定長度map
 					var len int
@@ -139,7 +140,15 @@ func menuOption3() bool {
 					//	取得目前計數器的值
 					fmt.Printf(">> 目前計數為: %d\n", deviceList[deviceNumber].GetCurrentCount())
 				case 7:
-				//	回傳當前的map
+					//	回傳當前的map成json檔
+					mapData, err := json.MarshalIndent(m, "", "  ")
+					if err != nil {
+						fmt.Println("failed", err)
+					}
+					fmt.Println("map: ", string(mapData))
+
+					//寫入json文檔
+					WriteBytes(mapData)
 				case 8:
 					//	拋出panic,並recover
 					fmt.Println(">> 返回前列表")
@@ -208,4 +217,33 @@ func NewDevice(deviceType, name string) IDevice {
 	}
 
 	return nil
+}
+
+func WriteBytes(b []byte) {
+	jsonfilepath := "D:/Tools/Learning/GolangTraining/golangtraning/GolangTraning/json/"
+	//默認檔名：
+	filename := "info.json"
+
+	fmt.Printf(">> 請輸入檔案名稱(default: info.json)：")
+	fmt.Scanf("%s", &filename)
+
+	fmt.Println(filename)
+	fmt.Println(">> " + filename + "已開啟")
+	//	寫入到路徑下
+	err := ioutil.WriteFile(jsonfilepath+filename, b, 0644)
+	if err != nil {
+		fmt.Println("Writefile Error =", err)
+		return
+	}
+	fmt.Println(">> " + filename + "已寫入")
+	fmt.Println(">> " + filename + "已關閉")
+	fileContent, err := ioutil.ReadFile(jsonfilepath + filename)
+	if err != nil {
+		fmt.Println("Read file err =", err)
+		return
+	}
+
+	fmt.Println(filename)
+
+	fmt.Println("Read file success =", string(fileContent))
 }
