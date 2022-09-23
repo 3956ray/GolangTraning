@@ -47,6 +47,7 @@ func (fas *FAS) StartCounter() error {
 	count = 0
 	//每三秒計數一次
 	timer = time.NewTimer(time.Second * 3)
+
 	select {
 	case <-timer.C:
 		count++
@@ -64,7 +65,6 @@ func (fas *FAS) StopCounter() error {
 }
 
 func (fas *FAS) GetCurrentCount() int {
-	fmt.Println(count)
 	return count
 }
 

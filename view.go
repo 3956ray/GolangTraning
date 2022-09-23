@@ -53,7 +53,6 @@ func menuOption1() {
 		fmt.Printf("<< 請輸入產品名稱：")
 		fmt.Scanf("%s\n", &name)
 		//    創建新產品
-		NewDeviceTypeNAS("NAS")
 		deviceList = append(deviceList, NewDevice("SAN", name))
 
 	} else if optionDeviceType == 1 {
@@ -62,7 +61,6 @@ func menuOption1() {
 		fmt.Printf("<< 請輸入產品名稱：")
 		fmt.Scanf("%s\n", &name)
 		//    創建新產品
-		NewDeviceTypeSAN("NAS")
 		deviceList = append(deviceList, NewDevice("NAS", name))
 
 	} else if optionDeviceType == 2 {
@@ -72,7 +70,6 @@ func menuOption1() {
 		fmt.Scanf("%s\n", &name)
 		//    創建新產品
 		deviceList = append(deviceList, NewDevice("FAS", name))
-		NewDeviceTypeFAS("FAS")
 	} else {
 		//字體顔色為紅色"\x1b[%dm string \x1b[0m", 31  -->d輸入數字表示的顔色
 		fmt.Printf("\x1b[%dmError: \x1b[0m請輸入正確的產品類型\n", 31)
@@ -98,61 +95,67 @@ func menuOption3() bool {
 	//如果產品為空，輸出為新增產品
 	var deviceNumber int
 	var option int
+
 	//檢測是否存在並選取
-	if len(deviceList) >= 1 {
+	if len(deviceList) > 1 {
 		//顯示全部產品
 		menuOption2()
 		//輸入產品編號
 		fmt.Printf("<< 請輸入指定產品列表內的編號：")
 		fmt.Scanf("%d\n", &deviceNumber)
 
-		for {
-			fmt.Println("--------------------------------------")
-			fmt.Println(">> 產品操作代號：")
-			fmt.Println("        1. 顯示產品類型")
-			fmt.Println("        2. 顯示產品名稱")
-			fmt.Println("        3. 產生一個指定長度的Map")
-			fmt.Println("        4. 啟動計數器")
-			fmt.Println("        5. 停止計數器")
-			fmt.Println("        6. 取得目前計數")
-			fmt.Println("        7. 將產品資訊存成JSON檔案")
-			fmt.Println("        8. 拋出panic")
-			fmt.Println("        9. 結束")
-			fmt.Printf("<< 請輸入執行的動作：")
+		if deviceNumber < len(deviceList) || deviceNumber > 0 {
+			for {
+				fmt.Println("--------------------------------------")
+				fmt.Println(">> 產品操作代號：")
+				fmt.Println("        1. 顯示產品類型")
+				fmt.Println("        2. 顯示產品名稱")
+				fmt.Println("        3. 產生一個指定長度的Map")
+				fmt.Println("        4. 啟動計數器")
+				fmt.Println("        5. 停止計數器")
+				fmt.Println("        6. 取得目前計數")
+				fmt.Println("        7. 將產品資訊存成JSON檔案")
+				fmt.Println("        8. 拋出panic")
+				fmt.Println("        9. 結束")
+				fmt.Printf("<< 請輸入執行的動作：")
 
-			fmt.Scanf("%d\n", &option)
-			switch option {
-			case 1:
-				//	回傳產品類型
-				fmt.Println(deviceList[deviceNumber].Type())
-			case 2:
-				//	回傳產品名稱
-				fmt.Println(deviceList[deviceNumber].Name())
-			case 3:
-				//	生成指定長度map
-				var len int
-				fmt.Print("請輸入Map的長度：")
-				fmt.Scanf("%d\n", &len)
-				deviceList[deviceNumber].NewMap(len)
-			case 4:
-				//	啟動一個計數器, SAN每0.5秒計數一次, NAS每10秒計數一次, FAS每3秒計數一次
-				deviceList[deviceNumber].StartCounter()
-			case 5:
-				//	停止計數器
-				deviceList[deviceNumber].StopCounter()
-			case 6:
-				//	取得目前計數器的值
-				deviceList[deviceNumber].GetCurrentCount()
-			case 7:
-			//	回傳當前的map
-			case 8:
-				//	拋出panic,並recover
-				fmt.Println(">> 返回前列表")
-				return false
-			case 9:
-				//	結束
-				return false
+				fmt.Scanf("%d\n", &option)
+				switch option {
+				case 1:
+					//	回傳產品類型
+					fmt.Println(deviceList[deviceNumber].Type())
+				case 2:
+					//	回傳產品名稱
+					fmt.Println(deviceList[deviceNumber].Name())
+				case 3:
+					//	生成指定長度map
+					var len int
+					fmt.Print("請輸入Map的長度：")
+					fmt.Scanf("%d\n", &len)
+					deviceList[deviceNumber].NewMap(len)
+				case 4:
+					//	啟動一個計數器, SAN每0.5秒計數一次, NAS每10秒計數一次, FAS每3秒計數一次
+					deviceList[deviceNumber].StartCounter()
+				case 5:
+					//	停止計數器
+					deviceList[deviceNumber].StopCounter()
+				case 6:
+					//	取得目前計數器的值
+					fmt.Printf(">> 目前計數為: %d\n", deviceList[deviceNumber].GetCurrentCount())
+				case 7:
+				//	回傳當前的map
+				case 8:
+					//	拋出panic,並recover
+					fmt.Println(">> 返回前列表")
+					return false
+				case 9:
+					//	結束
+					return false
+				}
 			}
+		} else {
+			fmt.Println("<< 產品不存在")
+			return false
 		}
 
 	} else {
@@ -165,10 +168,36 @@ func menuOption4() {
 	var optionFour int
 	fmt.Printf("<< 請輸入檢查項目(0:產品列表 | 1:指定產品 )：")
 	fmt.Scanf("%d\n", &optionFour)
+
+	switch optionFour {
+	case 0:
+		GetType(deviceList)
+	case 1:
+
+		if len(deviceList) > 1 {
+			var deviceNumber int
+			//顯示全部產品
+			menuOption2()
+			//輸入產品編號
+			fmt.Printf("<< 請輸入指定產品列表內的編號：")
+			fmt.Scanf("%d\n", &deviceNumber)
+			//不在此區間即表示產品不存在
+			if deviceNumber < len(deviceList) || deviceNumber > 0 {
+				GetType(deviceList[deviceNumber])
+			} else {
+				fmt.Println("<< 產品不存在")
+			}
+
+		} else {
+			//	為空，返回
+			fmt.Println("<< 尚未新增產品")
+		}
+	default:
+		GetType(deviceList)
+	}
 	if optionFour == 0 {
 		//	返回產品列表
-	} else if optionFour == 1 {
-		//	指定產品，為空，返回
+
 	}
 }
 
