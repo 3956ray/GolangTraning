@@ -29,6 +29,7 @@ func menu() bool {
 		menuOption2()
 	case 3:
 		for {
+			//使用bool進行判斷是否結束此循環
 			if !menuOption3() {
 				break
 			}
@@ -36,6 +37,7 @@ func menu() bool {
 	case 4:
 		menuOption4()
 	case 5:
+		menuOption5()
 		fmt.Println(">> Program exit")
 		return false
 	default:
@@ -212,6 +214,16 @@ func menuOption4() {
 	}
 }
 
+func menuOption5() {
+	for i := 1; i < len(deviceList); i++ {
+		fmt.Printf(">> %s %s destruct success\n", deviceList[i].Type(), deviceList[i].Name())
+	}
+}
+
+/*
+*
+創建設備
+*/
 func NewDevice(deviceType, name string) IDevice {
 	switch deviceType {
 	case "NAS":
@@ -225,6 +237,10 @@ func NewDevice(deviceType, name string) IDevice {
 	return nil
 }
 
+/*
+*
+json數據寫入。並生成json文件
+*/
 func WriteBytes(b []byte) {
 	jsonfilepath := "./"
 	//默認檔名：
