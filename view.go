@@ -151,8 +151,14 @@ func menuOption3() bool {
 					WriteBytes(mapData)
 				case 8:
 					//	拋出panic,並recover
-					fmt.Println(">> 返回前列表")
-					return false
+
+					defer func() {
+						if e := recover(); e != nil {
+							fmt.Printf("Panic recover %s %s %s\n", deviceList[deviceNumber].Type(), deviceList[deviceNumber].Name(), e)
+							fmt.Println(">> 返回前列表")
+						}
+					}()
+					deviceList[deviceNumber].Panic()
 				case 9:
 					//	結束
 					return false
@@ -220,7 +226,7 @@ func NewDevice(deviceType, name string) IDevice {
 }
 
 func WriteBytes(b []byte) {
-	jsonfilepath := "D:/Tools/Learning/GolangTraining/golangtraning/GolangTraning/json/"
+	jsonfilepath := "./"
 	//默認檔名：
 	filename := "info.json"
 

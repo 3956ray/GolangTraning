@@ -70,7 +70,7 @@ func (fas *FAS) GetCurrentCount() int {
 }
 
 func (fas *FAS) Panic() {
-
+	panic("throw panic")
 }
 
 func (fas *FAS) Destruct() {

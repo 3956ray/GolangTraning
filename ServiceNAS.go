@@ -67,7 +67,7 @@ func (nas *NAS) GetCurrentCount() int {
 }
 
 func (nas *NAS) Panic() {
-
+	panic("throw panic")
 }
 
 func (nas *NAS) Destruct() {

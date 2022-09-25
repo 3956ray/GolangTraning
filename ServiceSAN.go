@@ -66,7 +66,7 @@ func (san *SAN) GetCurrentCount() int {
 }
 
 func (san *SAN) Panic() {
-
+	panic("throw panic")
 }
 
 func (san *SAN) Destruct() {
