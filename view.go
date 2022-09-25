@@ -191,11 +191,13 @@ func menuOption4() {
 			var deviceNumber int
 			//顯示全部產品
 			menuOption2()
+
 			//輸入產品編號
 			fmt.Printf("<< 請輸入指定產品列表內的編號：")
 			fmt.Scanf("%d\n", &deviceNumber)
+
 			//不在此區間即表示產品不存在
-			if deviceNumber < len(deviceList) || deviceNumber > 0 {
+			if deviceNumber < len(deviceList) && deviceNumber > 0 {
 				GetType(deviceList[deviceNumber])
 			} else {
 				fmt.Println("<< 產品不存在")
