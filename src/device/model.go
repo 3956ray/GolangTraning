@@ -19,3 +19,4 @@ type SAN struct {
 var DeviceList []IDevice
 
 var M map[string]int
+var count int

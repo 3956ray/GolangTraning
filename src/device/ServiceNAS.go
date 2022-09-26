@@ -48,6 +48,15 @@ func (nas *NAS) StartCounter() error {
 	//case <-view.timer.C:
 	//	view.count++
 	//}
+
+	//使用倒數計時器，或是設置超時時間
+	count = 0
+	ticker := time.NewTicker(time.Second * 2)
+	defer ticker.Stop()
+	for {
+		<-ticker.C
+		count++
+	}
 	fmt.Println(">> 計數器啟動成功")
 	return nil
 }
