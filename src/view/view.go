@@ -151,8 +151,21 @@ func menuOption3() bool {
 					//	取得目前計數器的值
 					fmt.Printf(">> 目前計數為: %d\n", device.DeviceList[deviceNumber].GetCurrentCount())
 				case 7:
-					//	回傳當前的map成json檔
-					mapData, err := json.MarshalIndent(device.M, "", "  ")
+
+					//mapdata := make(map[string]interface{})
+
+					mapdata := map[string]interface{}{
+						"Type":       device.DeviceList[deviceNumber].Type(),
+						"Name":       device.DeviceList[deviceNumber].Name(),
+						"CurrentMap": device.M,
+					}
+					//mapdata["Type"] = device.DeviceList[deviceNumber].Type()
+					//mapdata["Name"] = device.DeviceList[deviceNumber].Name()
+					//
+					//mapdata["CurrentMap"] = device.M
+					fmt.Println(mapdata)
+					mapData, err := json.MarshalIndent(mapdata, "", "\t")
+
 					if err != nil {
 						fmt.Println("failed", err)
 					}
@@ -254,15 +267,17 @@ func NewDevice(deviceType, name string) device.IDevice {
 json數據寫入。並生成json文件
 */
 func WriteBytes(b []byte) {
+
 	jsonfilepath := "./"
 	//默認檔名：
 	filename := "info.json"
 
 	fmt.Printf(">> 請輸入檔案名稱(default: info.json)：")
-	fmt.Scanf("%s", &filename)
+	fmt.Scanf("%s\n", &filename)
 
 	fmt.Printf("Filename: \x1b[%dm%s\x1b[0m\n", 34, filename)
 	fmt.Println(">> " + filename + "已開啟")
+
 	//	寫入到路徑下
 	err := ioutil.WriteFile(jsonfilepath+filename, b, 0644)
 	if err != nil {
