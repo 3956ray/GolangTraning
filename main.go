@@ -1,18 +1,15 @@
 package main
 
 import (
-	"time"
+	"GolangTraning/src/view"
 )
 
-var timer *time.Timer
-var count int
-var m map[string]int
-
 func main() {
-	deviceList = make([]IDevice, 1, 100)
+	//初始化一個devicelist
+	view.NewDeviceList()
 	for {
 		//	顯示菜單
-		if !menu() {
+		if !view.Menu() {
 			break
 		}
 	}

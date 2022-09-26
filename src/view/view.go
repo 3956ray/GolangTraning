@@ -1,16 +1,21 @@
-package main
+package view
 
 import (
+	"GolangTraning/src/device"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"time"
 )
+
+var timer *time.Timer
+var count int
 
 /*
 *
 菜單
 */
-func menu() bool {
+func Menu() bool {
 	fmt.Println("--------------------------------------")
 	fmt.Println(">> 動作代號：")
 	fmt.Println("        1. 創建新產品物件並存入物件列表")
@@ -57,7 +62,7 @@ func menuOption1() {
 		fmt.Printf("<< 請輸入產品名稱：")
 		fmt.Scanf("%s\n", &name)
 		//    創建新產品
-		deviceList = append(deviceList, NewDevice("SAN", name))
+		device.DeviceList = append(device.DeviceList, NewDevice("SAN", name))
 
 	} else if optionDeviceType == 1 {
 		//輸入產品名稱
@@ -65,15 +70,16 @@ func menuOption1() {
 		fmt.Printf("<< 請輸入產品名稱：")
 		fmt.Scanf("%s\n", &name)
 		//    創建新產品
-		deviceList = append(deviceList, NewDevice("NAS", name))
+		device.DeviceList = append(device.DeviceList, NewDevice("NAS", name))
 
 	} else if optionDeviceType == 2 {
 		//輸入產品名稱
 		var name string
+
 		fmt.Printf("<< 請輸入產品名稱：")
 		fmt.Scanf("%s\n", &name)
 		//    創建新產品
-		deviceList = append(deviceList, NewDevice("FAS", name))
+		device.DeviceList = append(device.DeviceList, NewDevice("FAS", name))
 	} else {
 		//字體顔色為紅色"\x1b[%dm string \x1b[0m", 31  -->d輸入數字表示的顔色
 		fmt.Printf("\x1b[%dmError: \x1b[0m請輸入正確的產品類型\n", 31)
@@ -82,9 +88,9 @@ func menuOption1() {
 
 func menuOption2() {
 	//如果產品為空，輸出產品空
-	if len(deviceList) > 1 {
-		for i := 1; i < len(deviceList); i++ {
-			fmt.Printf("        %d. 產品類型：%s 產品名稱：%s\n", i, deviceList[i].Type(), deviceList[i].Name())
+	if len(device.DeviceList) > 1 {
+		for i := 1; i < len(device.DeviceList); i++ {
+			fmt.Printf("        %d. 產品類型：%s 產品名稱：%s\n", i, device.DeviceList[i].Type(), device.DeviceList[i].Name())
 		}
 	} else {
 		fmt.Println("<< 尚未新增產品")
@@ -96,14 +102,15 @@ func menuOption3() bool {
 	var deviceNumber int
 
 	//檢測是否存在並選取
-	if len(deviceList) > 1 {
+	if len(device.DeviceList) > 1 {
 		//顯示全部產品
 		menuOption2()
+
 		//輸入產品編號
 		fmt.Printf("<< 請輸入指定產品列表內的編號：")
 		fmt.Scanf("%d\n", &deviceNumber)
 
-		if deviceNumber < len(deviceList) && deviceNumber > 0 {
+		if deviceNumber < len(device.DeviceList) && deviceNumber > 0 {
 			for {
 				fmt.Println("--------------------------------------")
 				fmt.Println(">> 產品操作代號：")
@@ -117,33 +124,35 @@ func menuOption3() bool {
 				fmt.Println("        8. 拋出panic")
 				fmt.Println("        9. 結束")
 				fmt.Printf("<< 請輸入執行的動作：")
+
 				var option int
-				fmt.Scanf("%d\n", &option)
+				n, err := fmt.Scanf("%d \n", &option)
+				fmt.Println("n:", n, "err", err)
 				switch option {
 				case 1:
 					//	回傳產品類型
-					fmt.Println(">> 當前產品類型: " + deviceList[deviceNumber].Type())
+					fmt.Println(">> 當前產品類型: " + device.DeviceList[deviceNumber].Type())
 				case 2:
 					//	回傳產品名稱
-					fmt.Println(">> 當前產品名稱:" + deviceList[deviceNumber].Name())
+					fmt.Println(">> 當前產品名稱:" + device.DeviceList[deviceNumber].Name())
 				case 3:
 					//	生成指定長度map
 					var len int
 					fmt.Print("請輸入Map的長度：")
 					fmt.Scanf("%d\n", &len)
-					deviceList[deviceNumber].NewMap(len)
+					device.DeviceList[deviceNumber].NewMap(len)
 				case 4:
 					//	啟動一個計數器, SAN每0.5秒計數一次, NAS每10秒計數一次, FAS每3秒計數一次
-					deviceList[deviceNumber].StartCounter()
+					device.DeviceList[deviceNumber].StartCounter()
 				case 5:
 					//	停止計數器
-					deviceList[deviceNumber].StopCounter()
+					device.DeviceList[deviceNumber].StopCounter()
 				case 6:
 					//	取得目前計數器的值
-					fmt.Printf(">> 目前計數為: %d\n", deviceList[deviceNumber].GetCurrentCount())
+					fmt.Printf(">> 目前計數為: %d\n", device.DeviceList[deviceNumber].GetCurrentCount())
 				case 7:
 					//	回傳當前的map成json檔
-					mapData, err := json.MarshalIndent(m, "", "  ")
+					mapData, err := json.MarshalIndent(device.M, "", "  ")
 					if err != nil {
 						fmt.Println("failed", err)
 					}
@@ -151,16 +160,17 @@ func menuOption3() bool {
 
 					//寫入json文檔
 					WriteBytes(mapData)
+					break
 				case 8:
 					//	拋出panic,並recover
 
 					defer func() {
 						if e := recover(); e != nil {
-							fmt.Printf("Panic recover %s %s %s\n", deviceList[deviceNumber].Type(), deviceList[deviceNumber].Name(), e)
+							fmt.Printf("Panic recover %s %s %s\n", device.DeviceList[deviceNumber].Type(), device.DeviceList[deviceNumber].Name(), e)
 							fmt.Println(">> 返回前列表")
 						}
 					}()
-					deviceList[deviceNumber].Panic()
+					device.DeviceList[deviceNumber].Panic()
 				case 9:
 					//	結束
 					return false
@@ -184,10 +194,10 @@ func menuOption4() {
 
 	switch optionFour {
 	case 0:
-		GetType(deviceList)
+		device.GetType(device.DeviceList)
 	case 1:
 
-		if len(deviceList) > 1 {
+		if len(device.DeviceList) > 1 {
 			var deviceNumber int
 			//顯示全部產品
 			menuOption2()
@@ -197,8 +207,8 @@ func menuOption4() {
 			fmt.Scanf("%d\n", &deviceNumber)
 
 			//不在此區間即表示產品不存在
-			if deviceNumber < len(deviceList) && deviceNumber > 0 {
-				GetType(deviceList[deviceNumber])
+			if deviceNumber < len(device.DeviceList) && deviceNumber > 0 {
+				device.GetType(device.DeviceList[deviceNumber])
 			} else {
 				fmt.Println("<< 產品不存在")
 			}
@@ -208,7 +218,7 @@ func menuOption4() {
 			fmt.Println("<< 尚未新增產品")
 		}
 	default:
-		GetType(deviceList)
+		device.GetType(device.DeviceList)
 	}
 	if optionFour == 0 {
 		//	返回產品列表
@@ -217,8 +227,8 @@ func menuOption4() {
 }
 
 func menuOption5() {
-	for i := 1; i < len(deviceList); i++ {
-		fmt.Printf(">> %s %s destruct success\n", deviceList[i].Type(), deviceList[i].Name())
+	for i := 1; i < len(device.DeviceList); i++ {
+		fmt.Printf(">> %s %s destruct success\n", device.DeviceList[i].Type(), device.DeviceList[i].Name())
 	}
 }
 
@@ -226,14 +236,14 @@ func menuOption5() {
 *
 創建設備
 */
-func NewDevice(deviceType, name string) IDevice {
+func NewDevice(deviceType, name string) device.IDevice {
 	switch deviceType {
 	case "NAS":
-		return &NAS{deviceType: deviceType, name: name}
+		return &device.NAS{DeviceType: deviceType, Names: name}
 	case "SAN":
-		return &SAN{deviceType: deviceType, name: name}
+		return &device.SAN{DeviceType: deviceType, Names: name}
 	case "FAS":
-		return &FAS{deviceType: deviceType, name: name}
+		return &device.FAS{DeviceType: deviceType, Names: name}
 	}
 
 	return nil
@@ -251,7 +261,7 @@ func WriteBytes(b []byte) {
 	fmt.Printf(">> 請輸入檔案名稱(default: info.json)：")
 	fmt.Scanf("%s", &filename)
 
-	fmt.Println(filename)
+	fmt.Printf("Filename: \x1b[%dm%s\x1b[0m\n", 34, filename)
 	fmt.Println(">> " + filename + "已開啟")
 	//	寫入到路徑下
 	err := ioutil.WriteFile(jsonfilepath+filename, b, 0644)
@@ -261,13 +271,23 @@ func WriteBytes(b []byte) {
 	}
 	fmt.Println(">> " + filename + "已寫入")
 	fmt.Println(">> " + filename + "已關閉")
-	fileContent, err := ioutil.ReadFile(jsonfilepath + filename)
-	if err != nil {
-		fmt.Println("Read file err =", err)
-		return
-	}
 
-	fmt.Println(filename)
+	//讀取檔案并輸出
+	//fileContent, err := ioutil.ReadFile(jsonfilepath + filename)
+	//if err != nil {
+	//	fmt.Println("Read file err =", err)
+	//	return
+	//}
+	//
+	fmt.Printf("Filename: \x1b[%dm%s\x1b[0m \x1b[%dmsuccess\x1b[0m\n", 34, filename, 32)
+	//fmt.Printf("Read \x1b[%dmsuccess\x1b[0m = %s\n", 32, string(fileContent))
 
-	fmt.Println("Read file success =", string(fileContent))
+}
+
+/*
+*
+初始化devicelist
+*/
+func NewDeviceList() {
+	device.DeviceList = make([]device.IDevice, 1, 100)
 }
