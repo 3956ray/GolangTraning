@@ -126,8 +126,11 @@ func menuOption3() bool {
 				fmt.Printf("<< 請輸入執行的動作：")
 
 				var option int
-				n, err := fmt.Scanf("%d \n", &option)
-				fmt.Println("n:", n, "err", err)
+				fmt.Scanf("%d \n", &option)
+				//檢車scanf輸入情況
+				//n, err := fmt.Scanf("%d \n", &option)
+				//fmt.Println("n:", n, "err", err)
+
 				switch option {
 				case 1:
 					//	回傳產品類型
@@ -151,19 +154,19 @@ func menuOption3() bool {
 					//	取得目前計數器的值
 					fmt.Printf(">> 目前計數為: %d\n", device.DeviceList[deviceNumber].GetCurrentCount())
 				case 7:
-
-					//mapdata := make(map[string]interface{})
-
 					mapdata := map[string]interface{}{
 						"Type":       device.DeviceList[deviceNumber].Type(),
 						"Name":       device.DeviceList[deviceNumber].Name(),
 						"CurrentMap": device.M,
 					}
-					//mapdata["Type"] = device.DeviceList[deviceNumber].Type()
-					//mapdata["Name"] = device.DeviceList[deviceNumber].Name()
+					//fmt.Println(mapdata)
+
+					//var mapdata sync.Map
 					//
-					//mapdata["CurrentMap"] = device.M
-					fmt.Println(mapdata)
+					//mapdata.Store("Type", device.DeviceList[deviceNumber].Type())
+					//mapdata.Store("Name", device.DeviceList[deviceNumber].Name())
+					//mapdata.Store("CurrentMap", device.M)
+					//格式化json輸出
 					mapData, err := json.MarshalIndent(mapdata, "", "\t")
 
 					if err != nil {
@@ -173,7 +176,6 @@ func menuOption3() bool {
 
 					//寫入json文檔
 					WriteBytes(mapData)
-					break
 				case 8:
 					//	拋出panic,並recover
 
