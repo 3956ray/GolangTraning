@@ -17,6 +17,13 @@ type SAN struct {
 	Names            string
 }
 
+type JsonData struct {
+	Type         string
+	Name         string
+	CurrentMap   map[string]int
+	CurrentCount int
+}
+
 // 機器列表
 var DeviceList []IDevice
 

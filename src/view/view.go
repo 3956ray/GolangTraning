@@ -174,11 +174,13 @@ func menuOption3() bool {
 					//	取得目前計數器的值
 					fmt.Printf(">> 目前計數為: %d\n", device.DeviceList[deviceNumber].GetCurrentCount())
 				case 7:
-					mapdata := map[string]interface{}{
-						"Type":       device.DeviceList[deviceNumber].Type(),
-						"Name":       device.DeviceList[deviceNumber].Name(),
-						"CurrentMap": device.M,
+					jsonData := device.JsonData{
+						Type:         device.DeviceList[deviceNumber].Type(),
+						Name:         device.DeviceList[deviceNumber].Name(),
+						CurrentMap:   device.M,
+						CurrentCount: device.DeviceList[deviceNumber].GetCurrentCount(),
 					}
+
 					//fmt.Println(mapdata)
 
 					//var mapdata sync.Map
@@ -187,15 +189,15 @@ func menuOption3() bool {
 					//mapdata.Store("Name", device.DeviceList[deviceNumber].Name())
 					//mapdata.Store("CurrentMap", device.M)
 					//格式化json輸出
-					mapData, err := json.MarshalIndent(mapdata, "", "\t")
+					bytejsonData, err := json.MarshalIndent(jsonData, "", "\t")
 
 					if err != nil {
 						fmt.Println("failed", err)
 					}
-					fmt.Println("map: ", string(mapData))
+					fmt.Println("map: ", string(bytejsonData))
 
 					//寫入json文檔
-					WriteBytes(mapData)
+					WriteBytes(bytejsonData)
 				case 8:
 					//	拋出panic,並recover
 					defer func() {
