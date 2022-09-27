@@ -21,23 +21,23 @@ func Menu() bool {
 	fmt.Println("        5. 結束")
 	fmt.Printf("<< 請輸入執行的動作：")
 
-	var option int
-	fmt.Scanf("%d\n", &option)
+	var option string
+	fmt.Scanf("%s\n", &option)
 	switch option {
-	case 1:
+	case "1":
 		menuOption1()
-	case 2:
+	case "2":
 		menuOption2()
-	case 3:
+	case "3":
 		for {
 			//使用bool進行判斷是否結束此循環
 			if !menuOption3() {
 				break
 			}
 		}
-	case 4:
+	case "4":
 		menuOption4()
-	case 5:
+	case "5":
 		menuOption5()
 		fmt.Println(">> Program exit")
 		return false
@@ -48,11 +48,13 @@ func Menu() bool {
 }
 
 func menuOption1() {
-	var optionDeviceType int
+	var optionDeviceType string
 	fmt.Println(">> 開始創建產品物件")
 	fmt.Printf("<< 請輸入產品類型(0:SAN|1:NAS|2:FAS)：")
-	fmt.Scanf("%d\n", &optionDeviceType)
-	if optionDeviceType == 0 {
+	fmt.Scanf("%s\n", &optionDeviceType)
+
+	switch optionDeviceType {
+	case "0":
 		//輸入產品名稱
 		var name string
 		fmt.Printf("<< 請輸入產品名稱：")
@@ -64,7 +66,7 @@ func menuOption1() {
 		//    創建新產品
 		device.DeviceList = append(device.DeviceList, NewDevice("SAN", name))
 
-	} else if optionDeviceType == 1 {
+	case "1":
 		//輸入產品名稱
 		var name string
 		fmt.Printf("<< 請輸入產品名稱：")
@@ -75,8 +77,7 @@ func menuOption1() {
 		}
 		//    創建新產品
 		device.DeviceList = append(device.DeviceList, NewDevice("NAS", name))
-
-	} else if optionDeviceType == 2 {
+	case "2":
 		//輸入產品名稱
 		var name string
 
@@ -88,10 +89,20 @@ func menuOption1() {
 		}
 		//    創建新產品
 		device.DeviceList = append(device.DeviceList, NewDevice("FAS", name))
-	} else {
-		//字體顔色為紅色"\x1b[%dm string \x1b[0m", 31  -->d輸入數字表示的顔色
+	default:
 		fmt.Printf("\x1b[%dmError: \x1b[0m請輸入正確的產品類型\n", 31)
 	}
+
+	//if optionDeviceType == 0 {
+	//
+	//} else if optionDeviceType == 1 {
+	//
+	//} else if optionDeviceType == 2 {
+	//
+	//} else {
+	//	//字體顔色為紅色"\x1b[%dm string \x1b[0m", 31  -->d輸入數字表示的顔色
+	//	fmt.Printf("\x1b[%dmError: \x1b[0m請輸入正確的產品類型\n", 31)
+	//}
 }
 
 func menuOption2() {
