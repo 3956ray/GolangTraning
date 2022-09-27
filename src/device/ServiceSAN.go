@@ -40,29 +40,29 @@ func (san *SAN) GetCurrentMap() map[string]int {
 }
 
 func (san *SAN) StartCounter() error {
-	//view.count = 0
-	////每0.5秒計數一次
-	//view.timer = time.NewTimer((time.Second * 1) / 2)
-	//select {
-	//case <-view.timer.C:
-	//	view.count++
-	//}
-	return nil
+
+	count = 0
+	timer = time.NewTimer(time.Millisecond * 500)
+	for {
+		select {
+		case <-timer.C:
+			count = count + 1
+			timer.Reset(time.Millisecond * 500)
+		}
+	}
 }
 
 func (san *SAN) StopCounter() error {
-	//if view.timer.Stop() {
-	//	fmt.Println(">> 計數器關閉成功")
-	//} else {
-	//	fmt.Println(">> 計數器未啟動")
-	//}
+	if timer.Stop() {
+		fmt.Println(">> 計數器關閉成功")
+	} else {
+		fmt.Println(">> 計數器未啟動")
+	}
 	return nil
 }
 
 func (san *SAN) GetCurrentCount() int {
-	//fmt.Println(view.count)
-	//return view.count
-	return 0
+	return count
 }
 
 func (san *SAN) Panic() {

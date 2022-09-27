@@ -5,11 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"time"
 )
-
-var timer *time.Timer
-var count int
 
 /*
 *
@@ -61,6 +57,10 @@ func menuOption1() {
 		var name string
 		fmt.Printf("<< 請輸入產品名稱：")
 		fmt.Scanf("%s\n", &name)
+		if name == "" {
+			fmt.Printf("\x1b[%dmError: \x1b[0m請輸入正確的產品名稱\n", 31)
+			return
+		}
 		//    創建新產品
 		device.DeviceList = append(device.DeviceList, NewDevice("SAN", name))
 
@@ -69,6 +69,10 @@ func menuOption1() {
 		var name string
 		fmt.Printf("<< 請輸入產品名稱：")
 		fmt.Scanf("%s\n", &name)
+		if name == "" {
+			fmt.Printf("\x1b[%dmError: \x1b[0m請輸入正確的產品名稱\n", 31)
+			return
+		}
 		//    創建新產品
 		device.DeviceList = append(device.DeviceList, NewDevice("NAS", name))
 
@@ -78,6 +82,10 @@ func menuOption1() {
 
 		fmt.Printf("<< 請輸入產品名稱：")
 		fmt.Scanf("%s\n", &name)
+		if name == "" {
+			fmt.Printf("\x1b[%dmError: \x1b[0m請輸入正確的產品名稱\n", 31)
+			return
+		}
 		//    創建新產品
 		device.DeviceList = append(device.DeviceList, NewDevice("FAS", name))
 	} else {
@@ -127,6 +135,7 @@ func menuOption3() bool {
 
 				var option int
 				fmt.Scanf("%d \n", &option)
+
 				//檢車scanf輸入情況
 				//n, err := fmt.Scanf("%d \n", &option)
 				//fmt.Println("n:", n, "err", err)
@@ -145,11 +154,22 @@ func menuOption3() bool {
 					fmt.Scanf("%d\n", &len)
 					device.DeviceList[deviceNumber].NewMap(len)
 				case 4:
+					//  檢查計數器是否為0
 					//	啟動一個計數器, SAN每0.5秒計數一次, NAS每10秒計數一次, FAS每3秒計數一次
-					device.DeviceList[deviceNumber].StartCounter()
+					if !device.FlagTimer {
+						go device.DeviceList[deviceNumber].StartCounter()
+						device.FlagTimer = true
+						fmt.Println(">> 計數器啟動成功")
+					} else {
+						fmt.Println(">> 計數器正在執行中")
+					}
 				case 5:
-					//	停止計數器
-					device.DeviceList[deviceNumber].StopCounter()
+					if !device.FlagTimer {
+						fmt.Println(">> 計數器未啟動")
+					} else {
+						device.DeviceList[deviceNumber].StopCounter()
+					}
+
 				case 6:
 					//	取得目前計數器的值
 					fmt.Printf(">> 目前計數為: %d\n", device.DeviceList[deviceNumber].GetCurrentCount())
@@ -178,7 +198,6 @@ func menuOption3() bool {
 					WriteBytes(mapData)
 				case 8:
 					//	拋出panic,並recover
-
 					defer func() {
 						if e := recover(); e != nil {
 							fmt.Printf("Panic recover %s %s %s\n", device.DeviceList[deviceNumber].Type(), device.DeviceList[deviceNumber].Name(), e)
@@ -187,6 +206,12 @@ func menuOption3() bool {
 					}()
 					device.DeviceList[deviceNumber].Panic()
 				case 9:
+					//將timer結束，flagTimer設置爲false表示未使用
+					if device.FlagTimer {
+						device.DeviceList[deviceNumber].StopCounter()
+					}
+					device.FlagTimer = false
+
 					//	結束
 					return false
 				}
@@ -272,8 +297,8 @@ func WriteBytes(b []byte) {
 
 	jsonfilepath := "./"
 	//默認檔名：
-	filename := "info.json"
-
+	filename := "info"
+	filetype := ".json"
 	fmt.Printf(">> 請輸入檔案名稱(default: info.json)：")
 	fmt.Scanf("%s\n", &filename)
 
@@ -281,7 +306,7 @@ func WriteBytes(b []byte) {
 	fmt.Println(">> " + filename + "已開啟")
 
 	//	寫入到路徑下
-	err := ioutil.WriteFile(jsonfilepath+filename, b, 0644)
+	err := ioutil.WriteFile(jsonfilepath+filename+filetype, b, 0644)
 	if err != nil {
 		fmt.Println("Writefile Error =", err)
 		return

@@ -40,29 +40,28 @@ func (fas *FAS) GetCurrentMap() map[string]int {
 }
 
 func (fas *FAS) StartCounter() error {
-	//view.count = 0
-	////每三秒計數一次
-	//view.timer = time.NewTimer(time.Second * 3)
-	//
-	//select {
-	//case <-view.timer.C:
-	//	view.count++
-	//}
-	return nil
+	*(&count) = 0
+	timer = time.NewTimer(time.Second * 3)
+	for {
+		select {
+		case <-timer.C:
+			*(&count) = *(&count) + 1
+			//fmt.Println(count)
+			timer.Reset(time.Second * 3)
+		}
+
+	}
 }
 
 func (fas *FAS) StopCounter() error {
-	//if view.timer.Stop() {
-	//	fmt.Println(">> 計數器關閉成功")
-	//} else {
-	//	fmt.Println(">> 計數器未啟動")
-	//}
+	if timer.Stop() {
+		fmt.Println(">> 計數器關閉成功")
+	}
 	return nil
 }
 
 func (fas *FAS) GetCurrentCount() int {
-	//return view.count
-	return 0
+	return count
 }
 
 func (fas *FAS) Panic() {
